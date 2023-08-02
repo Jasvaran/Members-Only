@@ -12,21 +12,24 @@ const UserSchema = new Schema({
         required: true,
         maxLength: 100
     },
-    user_name: {
+    username: {
         type: String,
         required: true,
-        minLength: 3
     },
     password: {
         type: String,
         required: true,
-        minLength: 6,
         maxLength: 100
     },
     membership_status: {
         type: Boolean,
         default: false
-    }
+    },
+    admin: {
+        type: Boolean,
+        default: false
+    },
+
 })
 
 module.exports = mongoose.model("User", UserSchema)
