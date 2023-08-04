@@ -1,25 +1,29 @@
 const User = require('../models/user')
 const asyncHandler = require('express-async-handler')
+const passport = require('passport')
+const localStrategy = require('passport-local')
 const {body, validationResult } = require('express-validator')
 
 exports.index = asyncHandler(async(req, res, next) => {
 
+    // if user is already authenticated, user will be redirected back to main page 
     if (req.user){
         res.redirect('/main')
     }
 
     res.render("index", {
-        title: "Members Project"
+        title: "Members Project",
+        user: req.user
     })
 })
 
 
-exports.signUp_Controller_get = async(req, res, next) => {
+exports.signUp_Controller_get = asyncHandler(async(req, res, next) => {
     
     res.render("sign-up-form",{
         errors: false
     })
-}
+})
 
 exports.signUp_Controller_post = [
     // validate and sanitize
@@ -75,5 +79,21 @@ exports.signUp_Controller_post = [
         }
 
     })
-
 ]
+
+
+exports.logInController_post = passport.authenticate("local", {
+    successRedirect: '/main',
+    failureRedirect: '/'
+})
+
+
+
+exports.LogOutController_get = asyncHandler(async(req, res, next) => {
+    req.logOut(function(err){
+        if (err){
+            return next(err)
+        }
+        res.redirect('/')
+    })
+})
