@@ -1,17 +1,19 @@
 var express = require('express');
 var router = express.Router();
 const userController = require('../controllers/userController')
+const mainController = require('../controllers/mainController')
 
 /* GET home page. */
+// home page is login form as well
 router.get('/', userController.index);
 
 
 
+// log-in routes
 
-// sign in routes
-// router.get('/log-in', )
+router.post('/log-in', userController.logInController_post)
 
-router.post('/log-in')
+router.get('/log-out', userController.LogOutController_get)
 
 
 //sign up routes
@@ -21,6 +23,6 @@ router.post('/sign-up', userController.signUp_Controller_post)
 
 
 // main page 
-router.get('/main')
+router.get('/main', mainController.mainController_get )
 
 module.exports = router;

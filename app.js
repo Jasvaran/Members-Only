@@ -4,9 +4,11 @@ var express = require('express');
 var path = require('path');
 const session = require('express-session')
 const passport = require('passport')
-const localStrategy = require('passport-local')
+const localStrategy = require('passport-local').Strategy
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
+const User = require('./models/user')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -31,6 +33,37 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(session({secret: "cats", resave: false, saveUninitialized: true}))
+
+passport.use(
+  new localStrategy(async(username, password, done) => {
+    try {
+      const user = await User.findOne({username: username})
+      if (!user) {
+        return done(null, false, {message: "Incorrect Username"})
+      }
+      if (user.password !== password){
+        return done(null, false, {message: "Incorrect password"})
+      }
+      return done(null, user)
+    } catch (error) {
+      return done(error)     
+    }
+  })
+)
+
+passport.serializeUser(function(user, done){
+  done(null, user.id)
+});
+
+passport.deserializeUser(async function(id, done){
+  try {
+    const user = await User.findById(id)
+    done(null, user)
+  } catch (error) {
+    done(error)
+  }
+})
+
 app.use(passport.initialize())
 app.use(passport.session())
 
