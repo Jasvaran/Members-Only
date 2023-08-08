@@ -1,4 +1,5 @@
 require('dotenv').config()
+const bcrypt = require('bcryptjs')
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -41,10 +42,15 @@ passport.use(
       if (!user) {
         return done(null, false, {message: "Incorrect Username"})
       }
-      if (user.password !== password){
-        return done(null, false, {message: "Incorrect password"})
-      }
-      return done(null, user)
+      bcrypt.compare(password, user.password, (err, res) => {
+        
+        if (res) {
+          return done(null, user)
+        } else {
+          return done(null, false, { message: "Incorrect Password"})
+        }
+      })
+
     } catch (error) {
       return done(error)     
     }
@@ -66,7 +72,6 @@ passport.deserializeUser(async function(id, done){
 
 app.use(passport.initialize())
 app.use(passport.session())
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

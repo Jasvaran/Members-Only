@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler')
 const passport = require('passport')
 const localStrategy = require('passport-local')
 const {body, validationResult } = require('express-validator')
+const bcrypt = require('bcryptjs')
 
 exports.index = asyncHandler(async(req, res, next) => {
 
@@ -73,9 +74,16 @@ exports.signUp_Controller_post = [
             return;
             
         } else {
-            const new_user = await newUser.save()
-            console.log(new_user)
-            res.redirect('/')
+
+            bcrypt.hash(req.body.password, 10, async(err, hashedPassword) => {
+                if (err){
+                    next(err)
+                }
+                newUser.password = hashedPassword
+                await newUser.save()
+                res.redirect('/')
+            })
+
         }
 
     })

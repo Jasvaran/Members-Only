@@ -15,6 +15,11 @@
         <div>
             <a href="/log-out">Log Out</a>
         </div>
+        <div>
+            <% if (!user.membership_status) {%>
+                <a href="/join">Click here to join the Club</a>
+            <%} %>
+        </div>
     </nav>
 </body>
 </html>
