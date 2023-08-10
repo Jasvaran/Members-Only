@@ -15,7 +15,7 @@ const MessageSchema = new Schema({
     timestamp: {
         type: Date,
         required: true,
-        default: Date.now()
+        default: new Date()
     },
     user: {
         type: Schema.Types.ObjectId,
