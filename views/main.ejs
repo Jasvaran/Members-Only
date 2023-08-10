@@ -7,8 +7,30 @@
 </head>
 <body>
     <%- include('navbar.ejs') %>
-    <div>
-        MAIN PAGE
+    <% if (user.membership_status) { %>
+        <div class="create-message-container">
+            <a href="/create">Create New Message</a>
+        </div>
+    <% } %>
+    <div class="main-container">
+        <% allMessages.forEach(message => {%>
+            <div class="message">
+                <div class="messag-info">
+                    <h3 class="username">
+                        <%=message.user.username%>
+                    </h3>
+                    <p class="date">
+                        <%=message.date%>
+                    </p>
+                </div>
+                <div class="message-title">
+                    <%=message.title%>
+                </div>
+                <div class="message-text">
+                    <%=message.message%>
+                </div>
+            </div>
+        <%});%>
     </div>
 </body>
 </html>
