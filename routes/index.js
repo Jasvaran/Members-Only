@@ -31,4 +31,11 @@ router.get('/join', membershipController.membership_get)
 
 router.post('/join', membershipController.membership_post)
 
+
+// create message
+router.get('/create', mainController.create_message_get)
+
+router.post('/create', mainController.create_message_post)
+
+
 module.exports = router;
