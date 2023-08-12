@@ -13,6 +13,8 @@ exports.mainController_get = asyncHandler(async(req, res, next) => {
         res.redirect('/')
     }
 
+    
+
     // Query database for allUsers and Messages
     const [allUsers, allMessages] = await Promise.all([
         User.find({}).exec(),
